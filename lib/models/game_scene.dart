@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class GameSceneObject extends Equatable {
-
   const GameSceneObject({
     required this.id,
     required this.objectId,
@@ -17,7 +16,6 @@ class GameSceneObject extends Equatable {
 }
 
 class GameScenePositionObject extends GameSceneObject {
-
   const GameScenePositionObject({
     required super.id,
     required this.x,

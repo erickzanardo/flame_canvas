@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame_canvas/models/models.dart';
 
-
 class GamePositionObject extends GameObject {
   const GamePositionObject({
     required super.id,

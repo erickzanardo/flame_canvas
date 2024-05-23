@@ -1,7 +1,6 @@
 part of 'editor_cubit.dart';
 
 class EditorState extends Equatable {
-
   const EditorState({
     this.selectedScene,
     this.selectedObject,
