@@ -1,5 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:flame/components.dart';
+import 'package:uuid/uuid.dart';
+
+String generateGameObjectId() {
+  return const Uuid().v4();
+}
+
+GameObject createDefaultGameObject() {
+  return GameObject(id: generateGameObjectId());
+}
 
 class GameObject extends Equatable {
   const GameObject({

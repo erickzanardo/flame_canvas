@@ -1,6 +1,14 @@
 import 'package:flame/components.dart';
 import 'package:flame_canvas/models/models.dart';
 
+GamePositionObject createDefaultGamePositionObject() {
+  return GamePositionObject(
+    id: generateGameObjectId(),
+    width: 100,
+    height: 100,
+  );
+}
+
 class GamePositionObject extends GameObject {
   const GamePositionObject({
     required super.id,

@@ -1,4 +1,5 @@
 import 'package:flame_canvas/app/cubit/app_cubit.dart';
+import 'package:flame_canvas/editor/editor.dart';
 import 'package:flame_canvas/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,13 @@ class App extends StatelessWidget {
         ),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        home:
+            // TODO(erickzanardo): Change to an initial page that will allow
+            // project loading
+            BlocProvider(
+          create: (_) => EditorCubit(),
+          child: const EditorPage(),
+        ),
       ),
     );
   }
