@@ -1,4 +1,7 @@
 import 'package:flame_canvas/editor/editor.dart';
+import 'package:flame_canvas/models/game_objects/game_position_object.dart';
+import 'package:flame_canvas/models/game_objects/game_rectangle_object.dart';
+import 'package:flame_canvas/object_editor/object_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -73,9 +76,35 @@ class EditorView extends StatelessWidget {
                   ),
                 ),
                 const Divider(),
-                const Expanded(
+                Expanded(
                   flex: 6,
-                  child: Text('List will go here'),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          PopupMenuButton<String>(
+                            icon: const Icon(Icons.add),
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 'rectangle',
+                                child: Text('Add Rectangle Component'),
+                              ),
+                            ],
+                            onSelected: (value) {
+                              if (value == 'rectangle') {
+                                Navigator.of(context).push(
+                                  GameObjectEditorPage.route(
+                                    createDefaultGameRecntagleObject(),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      const Divider(),
+                    ],
+                  ),
                 ),
               ],
             ),
