@@ -38,9 +38,18 @@ class _GamePositionObjectEditorViewState
           child: GameWidget(game: _game),
         ),
         if (_game.isMounted)
-          PositionComponentForm(
-            object: widget.object,
-            component: _game.component,
+          Column(
+            children: [
+              PositionComponentForm(
+                object: widget.object,
+                component: _game.component,
+              ),
+              SaveObjectForm(
+                buildObject: () => widget.object.copyFromComponent(
+                  _game.component,
+                ),
+              ),
+            ],
           ),
       ],
     );

@@ -14,7 +14,6 @@ class GamePositionObject extends GameObject {
     required super.id,
     required this.width,
     required this.height,
-    super.children,
   });
 
   final double width;
@@ -24,7 +23,19 @@ class GamePositionObject extends GameObject {
   PositionComponent toComponent() {
     return PositionComponent(
       size: Vector2(width, height),
-      children: children.map((child) => child.toComponent()).toList(),
+    );
+  }
+
+  @override
+  GameObject copyFromComponent(Component component) {
+    if (component is! PositionComponent) {
+      return super.copyFromComponent(component);
+    }
+
+    return GamePositionObject(
+      id: id,
+      width: component.size.x,
+      height: component.size.y,
     );
   }
 

@@ -1,4 +1,6 @@
+import 'package:flame_canvas/app/cubit/app_cubit.dart';
 import 'package:flame_canvas/editor/editor.dart';
+import 'package:flame_canvas/models/game_objects/game_object.dart';
 import 'package:flame_canvas/models/game_objects/game_position_object.dart';
 import 'package:flame_canvas/models/game_objects/game_rectangle_object.dart';
 import 'package:flame_canvas/object_editor/object_editor.dart';
@@ -90,19 +92,47 @@ class EditorView extends StatelessWidget {
                                 child: Text('Add Rectangle Component'),
                               ),
                             ],
-                            onSelected: (value) {
+                            onSelected: (value) async {
+                              final appCubit = context.read<AppCubit>();
+                              Route<GameObject?>? route;
                               if (value == 'rectangle') {
-                                Navigator.of(context).push(
-                                  GameObjectEditorPage.route(
-                                    createDefaultGameRecntagleObject(),
-                                  ),
+                                route = GameObjectEditorPage.route(
+                                  createDefaultGameRecntagleObject(),
                                 );
+                              }
+
+                              if (route != null) {
+                                final object =
+                                    await Navigator.of(context).push(route);
+
+                                if (object != null) {
+                                  appCubit.upsertObject(object);
+                                }
                               }
                             },
                           ),
                         ],
                       ),
                       const Divider(),
+                      Expanded(
+                        child: BlocBuilder<AppCubit, AppState>(
+                          builder: (context, state) {
+                            if (state is! LoadedState) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return Column(
+                              children: [
+                                for (final object in state.gameData.objects)
+                                  ListTile(
+                                    title: Text(object.id),
+                                    onTap: () {},
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),

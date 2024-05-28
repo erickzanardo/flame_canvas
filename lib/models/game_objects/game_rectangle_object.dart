@@ -17,7 +17,6 @@ class GameRectangleObject extends GamePositionObject {
     required super.width,
     required super.height,
     this.color = 0xFFFFFFFF,
-    super.children,
   });
 
   final int color;
@@ -27,7 +26,20 @@ class GameRectangleObject extends GamePositionObject {
     return RectangleComponent(
       size: Vector2(width, height),
       paint: Paint()..color = Color(color),
-      children: children.map((child) => child.toComponent()).toList(),
+    );
+  }
+
+  @override
+  GameObject copyFromComponent(Component component) {
+    if (component is! RectangleComponent) {
+      return super.copyFromComponent(component);
+    }
+
+    return GameRectangleObject(
+      id: id,
+      width: component.size.x,
+      height: component.size.y,
+      color: component.paint.color.value,
     );
   }
 
