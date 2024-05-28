@@ -1,7 +1,6 @@
 import 'package:flame_canvas/app/cubit/app_cubit.dart';
 import 'package:flame_canvas/editor/editor.dart';
 import 'package:flame_canvas/models/game_objects/game_object.dart';
-import 'package:flame_canvas/models/game_objects/game_position_object.dart';
 import 'package:flame_canvas/models/game_objects/game_rectangle_object.dart';
 import 'package:flame_canvas/object_editor/object_editor.dart';
 import 'package:flutter/material.dart';
