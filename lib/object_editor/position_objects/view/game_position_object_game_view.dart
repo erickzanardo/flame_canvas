@@ -19,15 +19,25 @@ class GamePositionObjectEditorView extends StatefulWidget {
 class _GamePositionObjectEditorViewState
     extends State<GamePositionObjectEditorView> {
   late PositionObjectEditorGame _game;
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
+    _nameController.text = widget.object.name;
+
     _game = PositionObjectEditorGame(widget.object);
-    _game.loaded.then((_) {
+    _game.mounted.then((_) {
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _nameController.dispose();
   }
 
   @override
@@ -38,18 +48,32 @@ class _GamePositionObjectEditorViewState
           child: GameWidget(game: _game),
         ),
         if (_game.isMounted)
-          Column(
-            children: [
-              PositionComponentForm(
-                object: widget.object,
-                component: _game.component,
+          SizedBox(
+            width: 300,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+                    ),
+                  ),
+                  PositionComponentForm(
+                    object: widget.object,
+                    component: _game.component,
+                  ),
+                  SaveObjectForm(
+                    buildObject: () => widget.object
+                        .copyWithName(_nameController.text)
+                        .copyFromComponent(
+                          _game.component,
+                        ),
+                  ),
+                ],
               ),
-              SaveObjectForm(
-                buildObject: () => widget.object.copyFromComponent(
-                  _game.component,
-                ),
-              ),
-            ],
+            ),
           ),
       ],
     );

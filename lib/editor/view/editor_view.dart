@@ -109,13 +109,21 @@ class EditorView extends StatelessWidget {
                     builder: (context, state) {
                       final selectedObject = state.selectedObject;
 
-                      if (selectedObject == null) {
+                      final appState = context.read<AppCubit>().state;
+                      GameObject? gameObject;
+                      if (appState is LoadedState) {
+                        final result = appState.gameData.objects
+                            .where((element) => element.id == selectedObject);
+                        gameObject = result.isEmpty ? null : result.first;
+                      }
+
+                      if (gameObject == null) {
                         return const Center(
                           child: Text('No object selected'),
                         );
                       } else {
                         return Center(
-                          child: Text('Object: $selectedObject'),
+                          child: Text('Object: ${gameObject.name}'),
                         );
                       }
                     },
@@ -169,8 +177,36 @@ class EditorView extends StatelessWidget {
                               children: [
                                 for (final object in state.gameData.objects)
                                   ListTile(
-                                    title: Text(object.id),
-                                    onTap: () {},
+                                    title: Text(object.name),
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          onPressed: () async {
+                                            final appCubit =
+                                                context.read<AppCubit>();
+                                            final newObject =
+                                                await Navigator.of(
+                                              context,
+                                            ).push(
+                                              GameObjectEditorPage.route(
+                                                object,
+                                              ),
+                                            );
+
+                                            if (newObject != null) {
+                                              appCubit.upsertObject(newObject);
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      context
+                                          .read<EditorCubit>()
+                                          .openObject(object.id);
+                                    },
                                   ),
                               ],
                             );

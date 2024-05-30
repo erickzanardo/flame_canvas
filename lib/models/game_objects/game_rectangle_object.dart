@@ -6,6 +6,7 @@ import 'package:flame_canvas/models/models.dart';
 GameRectangleObject createDefaultGameRecntagleObject() {
   return GameRectangleObject(
     id: generateGameObjectId(),
+    name: '',
     width: 100,
     height: 100,
   );
@@ -14,6 +15,7 @@ GameRectangleObject createDefaultGameRecntagleObject() {
 class GameRectangleObject extends GamePositionObject {
   const GameRectangleObject({
     required super.id,
+    required super.name,
     required super.width,
     required super.height,
     this.color = 0xFFFFFFFF,
@@ -30,6 +32,17 @@ class GameRectangleObject extends GamePositionObject {
   }
 
   @override
+  GameRectangleObject copyWithName(String name) {
+    return GameRectangleObject(
+      id: id,
+      name: name,
+      width: width,
+      height: height,
+      color: color,
+    );
+  }
+
+  @override
   GameObject copyFromComponent(Component component) {
     if (component is! RectangleComponent) {
       return super.copyFromComponent(component);
@@ -37,6 +50,7 @@ class GameRectangleObject extends GamePositionObject {
 
     return GameRectangleObject(
       id: id,
+      name: name,
       width: component.size.x,
       height: component.size.y,
       color: component.paint.color.value,

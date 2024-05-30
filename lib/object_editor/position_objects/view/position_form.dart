@@ -18,8 +18,6 @@ class PositionComponentForm extends StatefulWidget {
 }
 
 class _PositionComponentFormState extends State<PositionComponentForm> {
-  final _idController = TextEditingController();
-  final _nameController = TextEditingController();
   final _widthController = TextEditingController();
   final _heightController = TextEditingController();
 
@@ -27,7 +25,6 @@ class _PositionComponentFormState extends State<PositionComponentForm> {
   void initState() {
     super.initState();
 
-    _idController.text = widget.object.id;
     _widthController.text = widget.object.width.toInt().toString();
     _heightController.text = widget.object.height.toInt().toString();
 
@@ -35,6 +32,14 @@ class _PositionComponentFormState extends State<PositionComponentForm> {
     _heightController.addListener(_updateObjectDimensions);
 
     widget.component.size.addListener(_updateFormDimensions);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _widthController.dispose();
+    _heightController.dispose();
   }
 
   void _updateFormDimensions() {
@@ -65,48 +70,29 @@ class _PositionComponentFormState extends State<PositionComponentForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 280,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            TextFormField(
-              enabled: false,
-              controller: _idController,
-              decoration: const InputDecoration(
-                labelText: 'Id',
-              ),
-            ),
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-              ),
-            ),
-            TextFormField(
-              controller: _widthController,
-              onChanged: (_) => _updateObjectDimensions(),
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              decoration: const InputDecoration(
-                labelText: 'Width',
-              ),
-            ),
-            TextFormField(
-              controller: _heightController,
-              onChanged: (_) => _updateObjectDimensions(),
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              decoration: const InputDecoration(
-                labelText: 'Height',
-              ),
-            ),
+    return Column(
+      children: [
+        TextFormField(
+          controller: _widthController,
+          onChanged: (_) => _updateObjectDimensions(),
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
           ],
+          decoration: const InputDecoration(
+            labelText: 'Width',
+          ),
         ),
-      ),
+        TextFormField(
+          controller: _heightController,
+          onChanged: (_) => _updateObjectDimensions(),
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          decoration: const InputDecoration(
+            labelText: 'Height',
+          ),
+        ),
+      ],
     );
   }
 }

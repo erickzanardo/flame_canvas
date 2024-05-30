@@ -4,6 +4,7 @@ import 'package:flame_canvas/models/models.dart';
 GamePositionObject createDefaultGamePositionObject() {
   return GamePositionObject(
     id: generateGameObjectId(),
+    name: '',
     width: 100,
     height: 100,
   );
@@ -12,6 +13,7 @@ GamePositionObject createDefaultGamePositionObject() {
 class GamePositionObject extends GameObject {
   const GamePositionObject({
     required super.id,
+    required super.name,
     required this.width,
     required this.height,
   });
@@ -34,8 +36,19 @@ class GamePositionObject extends GameObject {
 
     return GamePositionObject(
       id: id,
+      name: name,
       width: component.size.x,
       height: component.size.y,
+    );
+  }
+
+  @override
+  GamePositionObject copyWithName(String name) {
+    return GamePositionObject(
+      id: id,
+      name: name,
+      width: width,
+      height: height,
     );
   }
 

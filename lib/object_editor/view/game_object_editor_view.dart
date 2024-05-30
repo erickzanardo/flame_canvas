@@ -10,7 +10,7 @@ class GameObjectEditorPage extends StatelessWidget {
 
   final GameObject object;
 
-  static Route<GameObject?> route(GamePositionObject object) {
+  static Route<GameObject?> route(GameObject object) {
     return MaterialPageRoute<GameObject?>(
       builder: (_) => GameObjectEditorPage(
         object: object,
