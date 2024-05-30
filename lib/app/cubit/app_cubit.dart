@@ -42,4 +42,32 @@ class AppCubit extends Cubit<AppState> {
       }
     }
   }
+
+  void upsertScene(GameScene scene) {
+    if (state is LoadedState) {
+      final gameData = (state as LoadedState).gameData;
+
+      final scenes = gameData.scenes;
+      final index = scenes.indexWhere((element) => element.id == scene.id);
+      if (index == -1) {
+        emit(
+          LoadedState(
+            gameData: gameData.copyWith(
+              scenes: [...scenes, scene],
+            ),
+          ),
+        );
+      } else {
+        final newScenes = List<GameScene>.from(scenes);
+        newScenes[index] = scene;
+        emit(
+          LoadedState(
+            gameData: gameData.copyWith(
+              scenes: newScenes,
+            ),
+          ),
+        );
+      }
+    }
+  }
 }

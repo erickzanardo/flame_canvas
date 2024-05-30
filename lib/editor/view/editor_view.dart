@@ -1,8 +1,10 @@
 import 'package:flame_canvas/app/cubit/app_cubit.dart';
 import 'package:flame_canvas/editor/editor.dart';
+import 'package:flame_canvas/editor/view/view.dart';
 import 'package:flame_canvas/models/game_objects/game_object.dart';
 import 'package:flame_canvas/models/game_objects/game_rectangle_object.dart';
 import 'package:flame_canvas/object_editor/object_editor.dart';
+import 'package:flame_canvas/scene_editor/scene_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,15 +41,58 @@ class EditorView extends StatelessWidget {
               builder: (context, state) {
                 final selectedScene = state.selectedScene;
 
-                if (selectedScene == null) {
-                  return const Center(
-                    child: Text('No scene selected'),
-                  );
-                } else {
-                  return Center(
-                    child: Text('Scene: $selectedScene'),
-                  );
-                }
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () async {
+                            final appCubit = context.read<AppCubit>();
+                            final editorCubit = context.read<EditorCubit>();
+                            final scene = await NewSceneDialog.show(context);
+
+                            if (scene != null) {
+                              appCubit.upsertScene(scene);
+                              editorCubit.openScene(scene.id);
+                            }
+                          },
+                        ),
+                        BlocBuilder<AppCubit, AppState>(
+                          builder: (context, state) {
+                            if (state is! LoadedState ||
+                                state.gameData.scenes.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return DropdownMenu<String>(
+                              initialSelection: selectedScene,
+                              onSelected: (sceneId) {
+                                context.read<EditorCubit>().openScene(sceneId);
+                              },
+                              dropdownMenuEntries: [
+                                for (final scene in state.gameData.scenes)
+                                  DropdownMenuEntry(
+                                    value: scene.id,
+                                    label: scene.name,
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: selectedScene == null
+                          ? const Center(
+                              child: Text('No scene selected'),
+                            )
+                          : SceneEditorView(
+                              sceneId: selectedScene,
+                            ),
+                    ),
+                  ],
+                );
               },
             ),
           ),

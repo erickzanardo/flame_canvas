@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 class GameSceneObject extends Equatable {
   const GameSceneObject({
@@ -37,6 +38,15 @@ class GameScene extends Equatable {
     required this.name,
     required this.gameObjects,
   });
+
+  factory GameScene.createNew(String name) {
+    final id = const Uuid().v4();
+    return GameScene(
+      id: id,
+      name: name,
+      gameObjects: const [],
+    );
+  }
 
   final String id;
   final String name;
