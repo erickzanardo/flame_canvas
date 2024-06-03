@@ -4,6 +4,7 @@ import 'package:flame_canvas/editor/view/view.dart';
 import 'package:flame_canvas/models/game_objects/game_object.dart';
 import 'package:flame_canvas/models/game_objects/game_rectangle_object.dart';
 import 'package:flame_canvas/object_editor/object_editor.dart';
+import 'package:flame_canvas/object_viewer/object_viewer.dart';
 import 'package:flame_canvas/scene_editor/scene_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -122,8 +123,16 @@ class EditorView extends StatelessWidget {
                           child: Text('No object selected'),
                         );
                       } else {
-                        return Center(
-                          child: Text('Object: ${gameObject.name}'),
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Column(
+                            children: [
+                              Text('Object: ${gameObject.name}'),
+                              Expanded(
+                                child: GameObjectViewer(object: gameObject),
+                              ),
+                            ],
+                          ),
                         );
                       }
                     },

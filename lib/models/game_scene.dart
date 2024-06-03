@@ -53,6 +53,18 @@ class GameScene extends Equatable {
 
   final List<GameSceneObject> gameObjects;
 
+  GameScene copyWith({
+    String? id,
+    String? name,
+    List<GameSceneObject>? gameObjects,
+  }) {
+    return GameScene(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      gameObjects: gameObjects ?? this.gameObjects,
+    );
+  }
+
   @override
   List<Object?> get props => [id, name, gameObjects];
 }

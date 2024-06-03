@@ -70,4 +70,33 @@ class AppCubit extends Cubit<AppState> {
       }
     }
   }
+
+  void addSceneObject(
+    String id,
+    GameScenePositionObject gameScenePositionObject,
+  ) {
+    if (state is LoadedState) {
+      final gameData = (state as LoadedState).gameData;
+
+      final scenes = gameData.scenes;
+      final index = scenes.indexWhere((element) => element.id == id);
+      if (index != -1) {
+        final scene = scenes[index];
+        final gameObjects = scene.gameObjects;
+        emit(
+          LoadedState(
+            gameData: gameData.copyWith(
+              scenes: [
+                ...scenes.sublist(0, index),
+                scene.copyWith(
+                  gameObjects: [...gameObjects, gameScenePositionObject],
+                ),
+                ...scenes.sublist(index + 1),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+  }
 }
