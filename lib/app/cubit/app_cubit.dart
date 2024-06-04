@@ -12,18 +12,20 @@ class AppCubit extends Cubit<AppState> {
               scenes: [],
               objects: [],
             ),
+            projectPath: '',
           ),
         );
 
   void upsertObject(GameObject object) {
     if (state is LoadedState) {
-      final gameData = (state as LoadedState).gameData;
+      final loadedState = state as LoadedState;
+      final gameData = loadedState.gameData;
 
       final objects = gameData.objects;
       final index = objects.indexWhere((element) => element.id == object.id);
       if (index == -1) {
         emit(
-          LoadedState(
+          loadedState.copyWith(
             gameData: gameData.copyWith(
               objects: [...objects, object],
             ),
@@ -33,7 +35,7 @@ class AppCubit extends Cubit<AppState> {
         final newObjects = List<GameObject>.from(objects);
         newObjects[index] = object;
         emit(
-          LoadedState(
+          loadedState.copyWith(
             gameData: gameData.copyWith(
               objects: newObjects,
             ),
@@ -45,13 +47,14 @@ class AppCubit extends Cubit<AppState> {
 
   void upsertScene(GameScene scene) {
     if (state is LoadedState) {
-      final gameData = (state as LoadedState).gameData;
+      final loadedState = state as LoadedState;
+      final gameData = loadedState.gameData;
 
       final scenes = gameData.scenes;
       final index = scenes.indexWhere((element) => element.id == scene.id);
       if (index == -1) {
         emit(
-          LoadedState(
+          loadedState.copyWith(
             gameData: gameData.copyWith(
               scenes: [...scenes, scene],
             ),
@@ -61,7 +64,7 @@ class AppCubit extends Cubit<AppState> {
         final newScenes = List<GameScene>.from(scenes);
         newScenes[index] = scene;
         emit(
-          LoadedState(
+          loadedState.copyWith(
             gameData: gameData.copyWith(
               scenes: newScenes,
             ),
@@ -76,7 +79,8 @@ class AppCubit extends Cubit<AppState> {
     GameScenePositionObject gameScenePositionObject,
   ) {
     if (state is LoadedState) {
-      final gameData = (state as LoadedState).gameData;
+      final loadedState = state as LoadedState;
+      final gameData = loadedState.gameData;
 
       final scenes = gameData.scenes;
       final index = scenes.indexWhere((element) => element.id == id);
@@ -84,7 +88,7 @@ class AppCubit extends Cubit<AppState> {
         final scene = scenes[index];
         final gameObjects = scene.gameObjects;
         emit(
-          LoadedState(
+          loadedState.copyWith(
             gameData: gameData.copyWith(
               scenes: [
                 ...scenes.sublist(0, index),
