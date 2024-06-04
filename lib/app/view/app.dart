@@ -15,7 +15,9 @@ class App extends StatelessWidget {
         RepositoryProvider(create: (_) => ProjectRepository()),
       ],
       child: BlocProvider(
-        create: (_) => AppCubit(),
+        create: (context) => AppCubit(
+          projectRepository: context.read(),
+        ),
         child: MaterialApp(
           theme: ThemeData(
             appBarTheme: AppBarTheme(

@@ -4,6 +4,13 @@ abstract class AppState extends Equatable {
   const AppState();
 }
 
+class InitialState extends AppState {
+  const InitialState();
+
+  @override
+  List<Object?> get props => [];
+}
+
 class LoadedState extends AppState {
   const LoadedState({
     required this.gameData,

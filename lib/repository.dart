@@ -54,4 +54,52 @@ class ProjectRepository {
       objects: objects,
     );
   }
+
+  Future<void> saveScene(GameScene scene, String projectPath) async {
+    final sceneDirectory = Directory(
+      path.join(
+        projectPath,
+        rootFolder,
+        scenesFolder,
+      ),
+    );
+
+    if (!sceneDirectory.existsSync()) {
+      sceneDirectory.createSync(recursive: true);
+    }
+
+    final sceneFile = File(
+      path.join(
+        sceneDirectory.path,
+        '${scene.id}.json',
+      ),
+    );
+
+    final sceneJson = jsonEncode(scene.toJson());
+    await sceneFile.writeAsString(sceneJson);
+  }
+
+  Future<void> saveObject(GameObject object, String projectPath) async {
+    final objectDirectory = Directory(
+      path.join(
+        projectPath,
+        rootFolder,
+        objectsFolder,
+      ),
+    );
+
+    if (!objectDirectory.existsSync()) {
+      objectDirectory.createSync(recursive: true);
+    }
+
+    final objectFile = File(
+      path.join(
+        objectDirectory.path,
+        '${object.id}.json',
+      ),
+    );
+
+    final objectJson = jsonEncode(object.toJson());
+    await objectFile.writeAsString(objectJson);
+  }
 }
