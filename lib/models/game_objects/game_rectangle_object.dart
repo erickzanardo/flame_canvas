@@ -67,5 +67,24 @@ class GameRectangleObject extends GamePositionObject {
   }
 
   @override
+  String toCode() {
+    final className = codeClassName;
+    final buffer = StringBuffer()
+      ..writeln(super.toCode())
+      ..writeln("import 'dart:ui';")
+      ..writeln("import 'package:flame/components.dart';")
+      ..writeln('class $className extends RectangleComponent {')
+      ..writeln('  $className({')
+      ..writeln('    super.position,')
+      ..writeln('  }) : super(')
+      ..writeln('    size: Vector2($width, $height),')
+      ..writeln('    paint: Paint()..color = const Color($color),')
+      ..writeln('  );')
+      ..writeln('}');
+
+    return buffer.toString();
+  }
+
+  @override
   List<Object?> get props => super.props + [color];
 }

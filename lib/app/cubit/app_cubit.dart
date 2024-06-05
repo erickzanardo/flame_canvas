@@ -85,7 +85,11 @@ class AppCubit extends Cubit<AppState> {
         );
       }
       _projectRepository.saveScene(scene, loadedState.projectPath);
-      _flameCanvasService.writeSceneCode(scene, loadedState.projectPath);
+      _flameCanvasService.writeSceneCode(
+        scene: scene,
+        allObjects: gameData.objects,
+        projectPath: loadedState.projectPath,
+      );
     }
   }
 
@@ -116,7 +120,11 @@ class AppCubit extends Cubit<AppState> {
           ),
         );
         _projectRepository.saveScene(scene, loadedState.projectPath);
-        _flameCanvasService.writeSceneCode(scene, loadedState.projectPath);
+        _flameCanvasService.writeSceneCode(
+          scene: scene,
+          allObjects: gameData.objects,
+          projectPath: loadedState.projectPath,
+        );
       }
     }
   }

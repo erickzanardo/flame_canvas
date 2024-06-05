@@ -1,3 +1,4 @@
+import 'package:change_case/change_case.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flame/components.dart';
 import 'package:flame_canvas/models/models.dart';
@@ -53,6 +54,10 @@ class GameObject extends Equatable {
   final String id;
   final String name;
 
+  String toCode() {
+    return '// GENERATED CODE - DO NOT MODIFY MANUALLY';
+  }
+
   Component toComponent() {
     return Component();
   }
@@ -80,4 +85,6 @@ class GameObject extends Equatable {
 
   @override
   List<Object?> get props => [id, name];
+
+  String get codeClassName => '\$${name.toCapitalCase()}';
 }

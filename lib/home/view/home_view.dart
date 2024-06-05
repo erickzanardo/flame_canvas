@@ -23,6 +23,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AppCubit, AppState>(
+      listenWhen: (previous, current) =>
+          previous is! LoadedState && current is LoadedState,
       listener: (context, state) {
         if (state is LoadedState) {
           Navigator.of(context).push(EditorPage.route());

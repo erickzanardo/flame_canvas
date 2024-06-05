@@ -1,4 +1,6 @@
+import 'package:change_case/change_case.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flame_canvas/models/models.dart';
 import 'package:uuid/uuid.dart';
 
 class GameSceneObject extends Equatable {
@@ -121,4 +123,67 @@ class GameScene extends Equatable {
 
   @override
   List<Object?> get props => [id, name, gameObjects];
+
+  String toCode(List<GameObject> allObjects) {
+    final objectsMap = <String, GameObject>{
+      for (final object in allObjects) object.id: object,
+    };
+
+    final className = '\$${name.toCapitalCase()}';
+    final buffer = StringBuffer()
+      ..writeln('// GENERATED CODE - DO NOT MODIFY MANUALLY')
+      ..writeln("import 'package:flame/components.dart';")
+      ..writeln("import 'package:flame/game.dart';")
+      ..writeln('class $className extends FlameGame {')
+      ..writeln('  $className();')
+      ..writeln('  @override')
+      ..writeln('  Future<void> onLoad() async {')
+      ..writeln('    await super.onLoad();')
+      ..writeln();
+
+    // Used as a counter to generate unique variable names
+    // from objects of the same object type.
+    // TODO(erickzanardo): introduce a ref property in the GameSceneObject
+    // so the user can give a specific name to the object in the game, which
+    // can also be used as the component key.
+
+    final variableCounters = <String, int>{};
+
+    for (final sceneObject in gameObjects) {
+      final gameObjectId = sceneObject.objectId;
+      final gameObject = objectsMap[gameObjectId];
+
+      if (gameObject == null) {
+        throw Exception('Object with id $gameObjectId not found');
+      }
+
+      final variableName = '${gameObject.name.toCamelCase()}'
+          '${variableCounters[gameObject.name] ?? ''}';
+
+      variableCounters[gameObject.name] =
+          (variableCounters[gameObject.name] ?? 0) + 1;
+
+      // TODO(erickzanardo): add priority to the instantiation.
+      buffer.writeln('    final $variableName =');
+
+      if (gameObject is GamePositionObject &&
+          sceneObject is GameScenePositionObject) {
+        buffer
+          ..writeln('      ${gameObject.codeClassName}(')
+          ..writeln('        position: Vector2(')
+          ..writeln('          ${sceneObject.x},')
+          ..writeln('          ${sceneObject.y},')
+          ..writeln('        ),')
+          ..writeln('      );');
+      }
+
+      buffer.writeln('    world.add($variableName);');
+    }
+
+    buffer
+      ..writeln('  }')
+      ..writeln('}');
+
+    return buffer.toString();
+  }
 }

@@ -19,6 +19,7 @@ class App extends StatelessWidget {
       child: BlocProvider(
         create: (context) => AppCubit(
           projectRepository: context.read(),
+          flameCanvasService: context.read(),
         ),
         child: MaterialApp(
           theme: ThemeData(

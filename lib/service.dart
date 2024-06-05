@@ -4,6 +4,7 @@ import 'package:change_case/change_case.dart';
 import 'package:flame_canvas/models/models.dart';
 import 'package:path/path.dart' as path;
 
+const libFolder = 'lib';
 const flameCanvasFolder = 'flame_canvas';
 const flameCanvasObjectsFolder = 'objects';
 const flameCanvasScenesFolder = 'scenes';
@@ -14,6 +15,7 @@ class FlameCanvasService {
     final objectsDirectory = Directory(
       path.join(
         projectPath,
+        libFolder,
         flameCanvasFolder,
         flameCanvasObjectsFolder,
       ),
@@ -31,13 +33,18 @@ class FlameCanvasService {
       ),
     );
 
-    // TODO
+    await file.writeAsString(object.toCode());
   }
 
-  Future<void> writeSceneCode(GameScene scene, String projectPath) async {
+  Future<void> writeSceneCode({
+    required GameScene scene,
+    required List<GameObject> allObjects,
+    required String projectPath,
+  }) async {
     final scenesDirectory = Directory(
       path.join(
         projectPath,
+        libFolder,
         flameCanvasFolder,
         flameCanvasScenesFolder,
       ),
@@ -55,5 +62,7 @@ class FlameCanvasService {
         '$fileName.dart',
       ),
     );
+
+    await file.writeAsString(scene.toCode(allObjects));
   }
 }
