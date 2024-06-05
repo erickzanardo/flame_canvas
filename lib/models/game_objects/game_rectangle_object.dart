@@ -59,10 +59,11 @@ class GameRectangleObject extends GamePositionObject {
 
   @override
   Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
-      'type': 'rectangle',
-      'color': color,
-    });
+    return super.toJson()
+      ..addAll({
+        'type': 'rectangle',
+        'color': color,
+      });
   }
 
   @override

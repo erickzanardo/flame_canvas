@@ -98,7 +98,6 @@ class ProjectRepository {
         '${object.id}.json',
       ),
     );
-
     final objectJson = jsonEncode(object.toJson());
     await objectFile.writeAsString(objectJson);
   }

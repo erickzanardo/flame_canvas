@@ -2,6 +2,7 @@ import 'package:flame_canvas/app/cubit/app_cubit.dart';
 import 'package:flame_canvas/home/home.dart';
 import 'package:flame_canvas/l10n/l10n.dart';
 import 'package:flame_canvas/repository.dart';
+import 'package:flame_canvas/service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,6 +14,7 @@ class App extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(create: (_) => ProjectRepository()),
+        RepositoryProvider(create: (_) => FlameCanvasService()),
       ],
       child: BlocProvider(
         create: (context) => AppCubit(

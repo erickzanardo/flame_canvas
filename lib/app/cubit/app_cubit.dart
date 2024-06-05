@@ -2,16 +2,20 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flame_canvas/models/models.dart';
 import 'package:flame_canvas/repository.dart';
+import 'package:flame_canvas/service.dart';
 
 part 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit({
     required ProjectRepository projectRepository,
-  }) : _projectRepository = projectRepository,
-    super(const InitialState());
+    required FlameCanvasService flameCanvasService,
+  })  : _projectRepository = projectRepository,
+        _flameCanvasService = flameCanvasService,
+        super(const InitialState());
 
   final ProjectRepository _projectRepository;
+  final FlameCanvasService _flameCanvasService;
 
   Future<void> loadProject(String path) async {
     final gameData = await _projectRepository.loadProject(path);
@@ -50,6 +54,7 @@ class AppCubit extends Cubit<AppState> {
         );
       }
       _projectRepository.saveObject(object, loadedState.projectPath);
+      _flameCanvasService.writeObjectCode(object, loadedState.projectPath);
     }
   }
 
@@ -80,6 +85,7 @@ class AppCubit extends Cubit<AppState> {
         );
       }
       _projectRepository.saveScene(scene, loadedState.projectPath);
+      _flameCanvasService.writeSceneCode(scene, loadedState.projectPath);
     }
   }
 
@@ -110,6 +116,7 @@ class AppCubit extends Cubit<AppState> {
           ),
         );
         _projectRepository.saveScene(scene, loadedState.projectPath);
+        _flameCanvasService.writeSceneCode(scene, loadedState.projectPath);
       }
     }
   }

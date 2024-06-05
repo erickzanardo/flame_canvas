@@ -7,7 +7,7 @@ class GameSceneObject extends Equatable {
     required this.objectId,
     required this.priority,
   });
- 
+
   factory GameSceneObject.fromJson(Map<String, dynamic> json) {
     if (json['type'] == 'position') {
       return GameScenePositionObject(
@@ -56,11 +56,12 @@ class GameScenePositionObject extends GameSceneObject {
 
   @override
   Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
-      'type': 'position',
-      'x': x,
-      'y': y,
-    });
+    return super.toJson()
+      ..addAll({
+        'type': 'position',
+        'x': x,
+        'y': y,
+      });
   }
 
   @override

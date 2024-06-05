@@ -11,15 +11,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-
   @override
-    void initState() {
-      super.initState();
+  void initState() {
+    super.initState();
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<AppCubit>().loadProject('../examples/pong');
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppCubit>().loadProject('./examples/pong');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,6 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_canvas/app/cubit/app_cubit.dart';
 import 'package:flame_canvas/editor/editor.dart';
-import 'package:flame_canvas/models/game_scene.dart';
 import 'package:flame_canvas/models/models.dart';
 import 'package:uuid/uuid.dart';
 

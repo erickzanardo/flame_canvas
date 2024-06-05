@@ -54,11 +54,12 @@ class GamePositionObject extends GameObject {
 
   @override
   Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
-      'type': 'position',
-      'width': width,
-      'height': height,
-    });
+    return super.toJson()
+      ..addAll({
+        'type': 'position',
+        'width': width,
+        'height': height,
+      });
   }
 
   @override
