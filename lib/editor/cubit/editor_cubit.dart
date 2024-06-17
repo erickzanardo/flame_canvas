@@ -14,6 +14,10 @@ class EditorCubit extends Cubit<EditorState> {
     emit(state.unselectObject());
   }
 
+  void openSceneObject(String sceneObjectId) {
+    emit(state.selectSceneObject(sceneObjectId));
+  }
+
   void openScene(String? sceneId) {
     if (sceneId == null) {
       emit(state.unselectScene());

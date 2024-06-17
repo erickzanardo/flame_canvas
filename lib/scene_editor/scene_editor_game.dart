@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame_canvas/app/cubit/app_cubit.dart';
 import 'package:flame_canvas/editor/editor.dart';
 import 'package:flame_canvas/models/models.dart';
+import 'package:flame_canvas/scene_editor/components/object_selection_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class GameSceneGame extends FlameGame with TapCallbacks {
@@ -18,6 +19,7 @@ class GameSceneGame extends FlameGame with TapCallbacks {
   final GameScene scene;
   final EditorCubit editorCubit;
   final AppCubit appCubit;
+  final Map<Component, String> sceneObjects = {};
 
   @override
   FutureOr<void> onLoad() async {
@@ -37,7 +39,11 @@ class GameSceneGame extends FlameGame with TapCallbacks {
   void _addGameObject(GameSceneObject obj) {
     final gameObject = _getObjectById(obj.objectId);
 
-    final component = (gameObject.toComponent())..priority = obj.priority;
+    final component = (gameObject.toComponent())
+      ..priority = obj.priority
+      ..add(ObjectSelectionController());
+
+    sceneObjects[component] = obj.id;
 
     if (component is PositionComponent && obj is GameScenePositionObject) {
       component.position.x = obj.x;

@@ -1,11 +1,11 @@
 import 'package:flame_canvas/app/cubit/app_cubit.dart';
 import 'package:flame_canvas/editor/editor.dart';
 import 'package:flame_canvas/editor/view/view.dart';
-import 'package:flame_canvas/models/game_objects/game_object.dart';
-import 'package:flame_canvas/models/game_objects/game_rectangle_object.dart';
+import 'package:flame_canvas/models/models.dart';
 import 'package:flame_canvas/object_editor/object_editor.dart';
 import 'package:flame_canvas/object_viewer/object_viewer.dart';
 import 'package:flame_canvas/scene_editor/scene_editor.dart';
+import 'package:flame_canvas/scene_object_viewer/scene_object_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -106,23 +106,52 @@ class EditorView extends StatelessWidget {
                   flex: 4,
                   child: BlocBuilder<EditorCubit, EditorState>(
                     buildWhen: (previous, current) =>
-                        previous.selectedObject != current.selectedObject,
+                        previous.selectedObject != current.selectedObject ||
+                        previous.selectedSceneObject !=
+                            current.selectedSceneObject,
                     builder: (context, state) {
                       final selectedObject = state.selectedObject;
 
                       final appState = context.read<AppCubit>().state;
                       GameObject? gameObject;
+                      GameSceneObject? gameSceneObject;
                       if (appState is LoadedState) {
-                        final result = appState.gameData.objects
+                        final gameObjectsResult = appState.gameData.objects
                             .where((element) => element.id == selectedObject);
-                        gameObject = result.isEmpty ? null : result.first;
+                        gameObject = gameObjectsResult.isEmpty
+                            ? null
+                            : gameObjectsResult.first;
+
+                        final gameSceneObjectsResult = appState.gameData.scenes
+                            .expand((element) => element.gameObjects)
+                            .where(
+                              (element) =>
+                                  element.id == state.selectedSceneObject,
+                            );
+                        gameSceneObject = gameSceneObjectsResult.isEmpty
+                            ? null
+                            : gameSceneObjectsResult.first;
                       }
 
-                      if (gameObject == null) {
-                        return const Center(
-                          child: Text('No object selected'),
+                      if (gameSceneObject != null) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Column(
+                            children: [
+                              // This could be the ref instead, but probably
+                              // should live inside the SceneObjectViewer
+                              // Text('Object: ${gameObject.name}'),
+                              Expanded(
+                                child: SceneObjectViewer(
+                                  sceneObject: gameSceneObject,
+                                ),
+                              ),
+                            ],
+                          ),
                         );
-                      } else {
+                      }
+
+                      if (gameObject != null) {
                         return Padding(
                           padding: const EdgeInsets.only(right: 8),
                           child: Column(
@@ -135,6 +164,10 @@ class EditorView extends StatelessWidget {
                           ),
                         );
                       }
+
+                      return const Center(
+                        child: Text('No object selected'),
+                      );
                     },
                   ),
                 ),
