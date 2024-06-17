@@ -128,4 +128,45 @@ class AppCubit extends Cubit<AppState> {
       }
     }
   }
+
+  void deleteSceneObject({
+    required String sceneId,
+    required String sceneObjectId,
+  }) {
+    if (state is LoadedState) {
+      final loadedState = state as LoadedState;
+      final gameData = loadedState.gameData;
+
+      final scenes = gameData.scenes;
+      final index = scenes.indexWhere((element) => element.id == sceneId);
+      if (index != -1) {
+        final scene = scenes[index];
+        final gameObjects = scene.gameObjects;
+        final newGameObjects = gameObjects.where(
+          (element) => element.id != sceneObjectId,
+        );
+
+        final newScene = scene.copyWith(
+          gameObjects: newGameObjects.toList(),
+        );
+        emit(
+          loadedState.copyWith(
+            gameData: gameData.copyWith(
+              scenes: [
+                ...scenes.sublist(0, index),
+                newScene,
+                ...scenes.sublist(index + 1),
+              ],
+            ),
+          ),
+        );
+        _projectRepository.saveScene(newScene, loadedState.projectPath);
+        _flameCanvasService.writeSceneCode(
+          scene: newScene,
+          allObjects: gameData.objects,
+          projectPath: loadedState.projectPath,
+        );
+      }
+    }
+  }
 }
