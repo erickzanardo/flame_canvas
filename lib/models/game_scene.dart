@@ -7,6 +7,7 @@ class GameSceneObject extends Equatable {
   const GameSceneObject({
     required this.id,
     required this.objectId,
+    required this.sceneId,
     required this.priority,
   });
 
@@ -15,6 +16,7 @@ class GameSceneObject extends Equatable {
       return GameScenePositionObject(
         id: json['id'] as String,
         objectId: json['objectId'] as String,
+        sceneId: json['sceneId'] as String,
         priority: json['priority'] as int,
         x: json['x'] as double,
         y: json['y'] as double,
@@ -24,17 +26,20 @@ class GameSceneObject extends Equatable {
     return GameSceneObject(
       id: json['id'] as String,
       objectId: json['objectId'] as String,
+      sceneId: json['sceneId'] as String,
       priority: json['priority'] as int,
     );
   }
 
   final String id;
   final String objectId;
+  final String sceneId;
   final int priority;
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'sceneId': sceneId,
       'objectId': objectId,
       'priority': priority,
     };
@@ -49,6 +54,7 @@ class GameScenePositionObject extends GameSceneObject {
     required super.id,
     required this.x,
     required this.y,
+    required super.sceneId,
     required super.objectId,
     required super.priority,
   });
@@ -64,6 +70,24 @@ class GameScenePositionObject extends GameSceneObject {
         'x': x,
         'y': y,
       });
+  }
+
+  GameScenePositionObject copyWith({
+    double? x,
+    double? y,
+    String? id,
+    String? objectId,
+    String? sceneId,
+    int? priority,
+  }) {
+    return GameScenePositionObject(
+      x: x ?? this.x,
+      y: y ?? this.y,
+      id: id ?? this.id,
+      objectId: objectId ?? this.objectId,
+      sceneId: sceneId ?? this.sceneId,
+      priority: priority ?? this.priority,
+    );
   }
 
   @override

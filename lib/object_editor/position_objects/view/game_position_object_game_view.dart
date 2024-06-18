@@ -64,6 +64,7 @@ class _GamePositionObjectEditorViewState
                     object: widget.object,
                     component: _game.component,
                   ),
+                  const SizedBox(height: 16),
                   SaveObjectForm(
                     buildObject: () => widget.object
                         .copyWithName(_nameController.text)

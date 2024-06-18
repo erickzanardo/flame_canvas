@@ -1,1 +1,1 @@
-export 'object_selection_controller.dart';
+export 'game_scene_object_controller_component.dart';

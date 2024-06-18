@@ -44,6 +44,7 @@ class EditorView extends StatelessWidget {
 
                 return Column(
                   children: [
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         IconButton(
@@ -83,6 +84,7 @@ class EditorView extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 8),
                     Expanded(
                       child: selectedScene == null
                           ? const Center(
@@ -138,6 +140,7 @@ class EditorView extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 8),
                           child: Column(
                             children: [
+                              Text('Editing: ${gameSceneObject.id}'),
                               // This could be the ref instead, but probably
                               // should live inside the SceneObjectViewer
                               // Text('Object: ${gameObject.name}'),
@@ -156,7 +159,7 @@ class EditorView extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 8),
                           child: Column(
                             children: [
-                              Text('Object: ${gameObject.name}'),
+                              Text('Placing Object: ${gameObject.name}'),
                               Expanded(
                                 child: GameObjectViewer(object: gameObject),
                               ),

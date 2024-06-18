@@ -169,4 +169,60 @@ class AppCubit extends Cubit<AppState> {
       }
     }
   }
+
+  void updateGameSceneObjectPosition({
+    required String sceneId,
+    required String gameSceneObjectId,
+    required double x,
+    required double y,
+  }) {
+    if (state is LoadedState) {
+      final loadedState = state as LoadedState;
+      final gameData = loadedState.gameData;
+
+      final scenes = gameData.scenes;
+      final index = scenes.indexWhere((element) => element.id == sceneId);
+      if (index != -1) {
+        final scene = scenes[index];
+        final gameObjects = scene.gameObjects;
+        final gameSceneObjectIndex = gameObjects
+            .indexWhere((element) => element.id == gameSceneObjectId);
+        if (gameSceneObjectIndex != -1) {
+          final gameSceneObject = gameObjects[gameSceneObjectIndex];
+
+          if (gameSceneObject is! GameScenePositionObject) {
+            return;
+          }
+
+          final newGameSceneObject = gameSceneObject.copyWith(
+            x: x,
+            y: y,
+          );
+          final newGameObjects = List<GameSceneObject>.from(gameObjects);
+          newGameObjects[gameSceneObjectIndex] = newGameSceneObject;
+
+          final newScene = scene.copyWith(
+            gameObjects: newGameObjects,
+          );
+          emit(
+            loadedState.copyWith(
+              gameData: gameData.copyWith(
+                scenes: [
+                  ...scenes.sublist(0, index),
+                  newScene,
+                  ...scenes.sublist(index + 1),
+                ],
+              ),
+            ),
+          );
+          _projectRepository.saveScene(newScene, loadedState.projectPath);
+          _flameCanvasService.writeSceneCode(
+            scene: newScene,
+            allObjects: gameData.objects,
+            projectPath: loadedState.projectPath,
+          );
+        }
+      }
+    }
+  }
 }

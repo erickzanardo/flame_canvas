@@ -71,33 +71,75 @@ class _GameScenePositionObjectFormState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: _xController,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          decoration: const InputDecoration(labelText: 'X'),
-          onChanged: (String value) {},
-        ),
-        TextField(
-          controller: _yController,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          decoration: const InputDecoration(labelText: 'Y'),
-          onChanged: (String value) {},
-        ),
-        TextField(
-          controller: _priorityController,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          decoration: const InputDecoration(labelText: 'Priority'),
-          onChanged: (String value) {},
-        ),
-      ],
+    return BlocListener<AppCubit, AppState>(
+      listenWhen: (previous, current) {
+        final state = current;
+        if (previous is LoadedState && state is LoadedState) {
+          final previousScene = previous.gameData.scenes
+              .firstWhere((scene) => scene.id == widget.sceneObject.sceneId);
+
+          final scene = state.gameData.scenes
+              .firstWhere((scene) => scene.id == widget.sceneObject.sceneId);
+
+          final previousObject = previousScene.gameObjects
+              .firstWhere((obj) => obj.id == widget.sceneObject.id);
+
+          final objects =
+              scene.gameObjects.where((obj) => obj.id == widget.sceneObject.id);
+
+          if (objects.isEmpty) {
+            return false;
+          }
+
+          final object = objects.first;
+
+          return previousObject != object;
+        }
+        return false;
+      },
+      listener: (context, state) {
+        // Update the controllers
+        if (state is LoadedState) {
+          final scene = state.gameData.scenes
+              .firstWhere((scene) => scene.id == widget.sceneObject.sceneId);
+
+          final object = scene.gameObjects
+              .firstWhere((obj) => obj.id == widget.sceneObject.id);
+
+          if (object is GameScenePositionObject) {
+            _xController.text = object.x.toString();
+            _yController.text = object.y.toString();
+          }
+        }
+      },
+      child: Column(
+        children: [
+          TextField(
+            controller: _xController,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            decoration: const InputDecoration(labelText: 'X'),
+            onChanged: (String value) {},
+          ),
+          TextField(
+            controller: _yController,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            decoration: const InputDecoration(labelText: 'Y'),
+            onChanged: (String value) {},
+          ),
+          TextField(
+            controller: _priorityController,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            decoration: const InputDecoration(labelText: 'Priority'),
+            onChanged: (String value) {},
+          ),
+        ],
+      ),
     );
   }
 }
